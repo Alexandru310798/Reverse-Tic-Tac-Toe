@@ -26,7 +26,7 @@ player_sign = 'X'
 alphabeta_choice = 0
 
 
-def winner(list_of_positions=[]):
+def lost(list_of_positions=[]):
     if list_of_positions.count(11) > 0 and list_of_positions.count(12) > 0 and list_of_positions.count(13) > 0:
         return True
     if list_of_positions.count(21) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(23) > 0:
@@ -43,7 +43,32 @@ def winner(list_of_positions=[]):
         return True
     if list_of_positions.count(13) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(31) > 0:
         return True
+    return False
 
+
+def winner(list_of_positions=[]):
+    valid = 0
+    if not available_positions:
+        valid += 1
+    if list_of_positions.count(11) > 0 and list_of_positions.count(12) > 0 and list_of_positions.count(13) > 0:
+        valid += 1
+    if list_of_positions.count(21) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(23) > 0:
+        valid += 1
+    if list_of_positions.count(31) > 0 and list_of_positions.count(32) > 0 and list_of_positions.count(33) > 0:
+        valid += 1
+    if list_of_positions.count(11) > 0 and list_of_positions.count(21) > 0 and list_of_positions.count(31) > 0:
+        valid += 1
+    if list_of_positions.count(12) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(32) > 0:
+        valid += 1
+    if list_of_positions.count(13) > 0 and list_of_positions.count(23) > 0 and list_of_positions.count(33) > 0:
+        valid += 1
+    if list_of_positions.count(11) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(33) > 0:
+        valid += 1
+    if list_of_positions.count(13) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(31) > 0:
+        valid += 1
+
+    if valid == 9:
+        return True
     return False
 
 
@@ -200,14 +225,15 @@ def define_sign(number, sign='X'):
 
     if AI_turn:
         define_sign(minimax(available_positions, 0, True, AI, player)['position'])
-    if winner(player):
-        player_wins += 1
-        showinfo("game result","Player has won")
-    elif winner(AI):
+
+    if lost(player):
+        showinfo("Game result", "Player has lost, AI has won")
         AI_wins += 1
-        showinfo("game result", "AI has won")
-
-
+    elif lost(AI):
+        showinfo("Game result", "AI has lost, Player has won")
+        player_wins += 1
+    elif not (available_positions or lost(player) or lost(AI) ):
+        showinfo("Game result", "It's a draw")
 
 
 def reverse_sign(sign):
@@ -266,11 +292,11 @@ def play(positions, artificial, player1):
         positions.remove(artificial_move)
 
         draw_table(artificial, AI_sign, player1, player_sign)
-        if winner(player1):
-            print("Player has won")
+        if lost(player1):
+            print("Player has lost, AI has won")
             exit(0)
-        elif winner(artificial):
-            print("AI has won")
+        elif lost(artificial):
+            print("AI has lost, Player has won")
             exit(0)
 
     print("It's a draw")
@@ -308,6 +334,7 @@ if __name__ == "__main__":
     button_3_3.grid(row=3, column=3)
     player.clear()
     AI.clear()
+    
 
     if console_line_or_GUI == "GUI":
         while available_positions:
