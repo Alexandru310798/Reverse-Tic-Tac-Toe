@@ -50,21 +50,21 @@ def winner(list_of_positions=[]):
     valid = 0
     if not available_positions:
         valid += 1
-    if list_of_positions.count(11) > 0 and list_of_positions.count(12) > 0 and list_of_positions.count(13) > 0:
+    if not (list_of_positions.count(11) > 0 and list_of_positions.count(12) > 0 and list_of_positions.count(13) > 0):
         valid += 1
-    if list_of_positions.count(21) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(23) > 0:
+    if not(list_of_positions.count(21) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(23) > 0):
         valid += 1
-    if list_of_positions.count(31) > 0 and list_of_positions.count(32) > 0 and list_of_positions.count(33) > 0:
+    if not(list_of_positions.count(31) > 0 and list_of_positions.count(32) > 0 and list_of_positions.count(33) > 0):
         valid += 1
-    if list_of_positions.count(11) > 0 and list_of_positions.count(21) > 0 and list_of_positions.count(31) > 0:
+    if not(list_of_positions.count(11) > 0 and list_of_positions.count(21) > 0 and list_of_positions.count(31) > 0):
         valid += 1
-    if list_of_positions.count(12) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(32) > 0:
+    if not(list_of_positions.count(12) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(32) > 0):
         valid += 1
-    if list_of_positions.count(13) > 0 and list_of_positions.count(23) > 0 and list_of_positions.count(33) > 0:
+    if not(list_of_positions.count(13) > 0 and list_of_positions.count(23) > 0 and list_of_positions.count(33) > 0):
         valid += 1
-    if list_of_positions.count(11) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(33) > 0:
+    if not(list_of_positions.count(11) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(33) > 0):
         valid += 1
-    if list_of_positions.count(13) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(31) > 0:
+    if not(list_of_positions.count(13) > 0 and list_of_positions.count(22) > 0 and list_of_positions.count(31) > 0):
         valid += 1
 
     if valid == 9:
@@ -224,7 +224,8 @@ def define_sign(number, sign='X'):
     AI_turn = not AI_turn
 
     if AI_turn:
-        define_sign(minimax(available_positions, 0, True, AI, player)['position'])
+        AI_move = minimax(available_positions, 0, True, AI, player)['position']
+        define_sign(AI_move)
 
     if lost(player):
         showinfo("Game result", "Player has lost, AI has won")
@@ -334,7 +335,7 @@ if __name__ == "__main__":
     button_3_3.grid(row=3, column=3)
     player.clear()
     AI.clear()
-    
+
 
     if console_line_or_GUI == "GUI":
         while available_positions:
