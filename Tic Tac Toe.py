@@ -1,4 +1,5 @@
 import math
+import datetime
 from itertools import permutations
 from tkinter import *
 from tkinter.messagebox import showinfo
@@ -165,6 +166,7 @@ def select_algorithm(positions, depth, artificial_intelligence, a_i_positions=[]
 def define_sign(number, sign='X'):  # this is the click function of the GUI Buttons
     global player, AI, AI_wins, player_wins
     global AI_turn, alphabeta_choice
+    time_move_start = datetime.datetime.now()
     if available_positions.count(number) == 0:  # if no more moves, end game
         return
     if AI_turn:  # determine who is to move
@@ -232,6 +234,9 @@ def define_sign(number, sign='X'):  # this is the click function of the GUI Butt
     if AI_turn:  # if we moved, now it's AI time to move, and it'll choose
         AI_move = select_algorithm(available_positions, 0, True, AI, player, alphabeta_choice)['position']
         define_sign(AI_move)
+        time_move_done = datetime.datetime.now()
+        showinfo("AI time to move", "AI moved in " + str(
+            time_move_done - time_move_start))  # to calculate the time to move, I used the started time - the time  the move was done
 
     if lost(player):  # verify if someone has lost, to can stop the game
         showinfo("Game result", "Player has lost, AI has won")
@@ -279,6 +284,8 @@ def play(positions, artificial, player1):  # playing console function
     global AI_sign, player_sign, alphabeta_choice
     print("If you want to exit the game, please insert an invalid number")  # if you want to end the game
     while positions or winner(player1) or winner(artificial):  # while we can still play, we play
+
+        time_move_start = datetime.datetime.now()
         your_move = int(input("Your move: "))
         if available_positions.count(your_move) == 0:  # check 'till the move is valid
             while available_positions.count(your_move) == 0:
@@ -286,16 +293,20 @@ def play(positions, artificial, player1):  # playing console function
                 if exit_option == "exit":
                     exit(0)
                 your_move = int(input("Your move was already taken, please choose another: "))
-
+        time_move_done = datetime.datetime.now()  # to calculate the time to move, I used the started time - the time the move was done
+        print("You moved in " + str(time_move_done - time_move_start))
         player1.append(your_move)  # adding the position
         positions.remove(your_move)  # remove the position
 
         if not positions:  # if that was the last available position
             break
 
+        time_move_start = datetime.datetime.now()
         artificial_move = select_algorithm(positions, 0, True, artificial, player1, alphabeta_choice)[
             'position']  # here we choose the search algorithm we are facing
-
+        time_move_done = datetime.datetime.now()
+        print("AI moved in " + str(
+            time_move_done - time_move_start))  # to calculate the time to move, I used the started time - the time the move was done
         print("AI move is: " + str(artificial_move))
         artificial.append(artificial_move)
         positions.remove(artificial_move)
