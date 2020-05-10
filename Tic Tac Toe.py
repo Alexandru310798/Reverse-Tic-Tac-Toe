@@ -4,6 +4,7 @@ from itertools import permutations
 from tkinter import *
 from tkinter.messagebox import showinfo
 
+# the positions of the table will be represented as numbers( 11 = line 1, first element)
 available_positions = [11, 12, 13, 21, 22, 23, 31, 32, 33]  # the positions of the table
 
 root = Tk()  # root of the GUI
@@ -90,11 +91,12 @@ def minimax(positions, depth, artificial_intelligence, a_i_positions=[], player_
         for possible_move in positions:
             positions.remove(possible_move)
             a_i_positions.append(possible_move)
-            value = minimax(positions, depth + 1, False, a_i_positions, player_positions)   # value returned is the simulated value of the state with the new position
+            value = minimax(positions, depth + 1, False, a_i_positions,
+                            player_positions)  # value returned is the simulated value of the state with the new position
             value['position'] = possible_move
             if best['score'] < value['score']:
                 best = value
-            a_i_positions.remove(possible_move)                                            # after the simulate, we are going back to the initial state
+            a_i_positions.remove(possible_move)  # after the simulate, we are going back to the initial state
             positions.append(possible_move)
 
     else:  # this search is for the player, so the AI will try to find the min value
@@ -102,11 +104,12 @@ def minimax(positions, depth, artificial_intelligence, a_i_positions=[], player_
         for possible_move in positions:
             player.append(possible_move)
             positions.remove(possible_move)
-            value = minimax(positions, depth + 1, True, a_i_positions, player_positions)  # value returned is the simulated value of the state with the new position
+            value = minimax(positions, depth + 1, True, a_i_positions,
+                            player_positions)  # value returned is the simulated value of the state with the new position
             value['position'] = possible_move
             if best['score'] > value['score']:
                 best = value
-            positions.append(possible_move)                  # after the simulate, we are going back to the initial state
+            positions.append(possible_move)  # after the simulate, we are going back to the initial state
             player.remove(possible_move)
     return best  # the best returned will be :{'position': x, 'score': maximum available}, so we will use that position
 
@@ -157,8 +160,8 @@ def alphabeta(positions, depth, artificial_intelligence, a_i_positions=[], playe
 
 
 def select_algorithm(positions, depth, artificial_intelligence, a_i_positions=[], player_positions=[],
-                     alphabeta_choice=False):  # this function is used to select wich algorithm we will compete against
-    if alphabeta_choice:
+                     alphabeta_choice=False):  # this function is used to select which algorithm we will compete against
+    if alphabeta_choice == 2:
         return alphabeta(positions, depth, True, a_i_positions, player_positions, (-1) * math.inf, math.inf)
     return minimax(positions, depth, True, a_i_positions, player_positions)
 
@@ -268,14 +271,14 @@ def draw_table(artificial=[], artificial_sign='X', player1=[],
 
     string = ""
     for i in range(11, 14):
-        string = string + "  " + table[i]           # concatenate the string for the first line of the table
+        string = string + "  " + table[i]  # concatenate the string for the first line of the table
     print(string)
     string = ""
     for i in range(21, 24):
-        string = string + "  " + table[i]               # concatenate the string for the second line of the table
+        string = string + "  " + table[i]  # concatenate the string for the second line of the table
     print(string)
     string = ""
-    for i in range(31, 34):                 # concatenate the string for the third line of the table
+    for i in range(31, 34):  # concatenate the string for the third line of the table
         string = string + "  " + table[i]
     print(string)
 
@@ -342,14 +345,14 @@ if __name__ == "__main__":
         print("You will compete against the Alpha Beta Prunning Algorithm and your sign is: " + player_sign)
 
     console_line_or_GUI = input("The way to play: console/ GUI: ")
-    #the elements of the GUI:
+    # the elements of the GUI:
     textPlayer = "Player : " + player_sign + "  Wins: " + str(player_wins) + " "
     label_1 = Label(root, text=textPlayer, font="times 15")
     label_1.grid(row=0, column=1)
     textAI = "AI : " + AI_sign + "  Wins: " + str(AI_wins) + "  "
     label_2 = Label(root, text=textAI, font="times 15")
     label_2.grid(row=0, column=2)
-    button_1_1.grid(row=1, column=1)            #
+    button_1_1.grid(row=1, column=1)
     button_1_2.grid(row=1, column=2)
     button_1_3.grid(row=1, column=3)
     button_2_1.grid(row=2, column=1)
@@ -361,7 +364,7 @@ if __name__ == "__main__":
     player.clear()
     AI.clear()
 
-    if console_line_or_GUI == "GUI":        #the game starts
+    if console_line_or_GUI == "GUI":  # the game starts
         while available_positions:
             root.mainloop()
     else:
